@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="example.myRent">
+	 <select id="selectRentalBookTitle" parameterType="String" resultType="Rent">
+		<![CDATA[
+			SELECT risbn, rtitle, rchack, rdate
+			FROM rental
+			WHERE rtitle like CONCAT('%',#{rtitle},'%')
+			ORDER BY risbn DESC
+		]]>
+	</select>
+	
+	<update id="updaterisbn" parameterType="String">
+		<![CDATA[
+			Update rental 
+			set rental.rchack = '대여중', rental.rdate = current_date()
+			Where rental.risbn = (select book.bisbn from Book  where Book.bisbn = #{risbn}) and rental.rchack != '대여중'
+		]]>
+	</update>
+	
+	
+</mapper>
